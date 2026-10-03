@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' https://mc-heads.net data: blob:; style-src 'self'; script-src 'self'" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Block Launcher</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="app">
+    <aside class="sidebar">
+      <div class="profile">
+        <canvas id="skin-head" class="avatar" width="8" height="8"></canvas>
+        <div class="profile-text">
+          <div id="profile-name" class="profile-name">Player</div>
+          <div id="profile-sub" class="profile-sub">Offline account</div>
+        </div>
+      </div>
+
+      <nav class="nav">
+        <button class="nav-item active" data-tab="play">
+          <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z" /></svg>Play
+        </button>
+        <button class="nav-item" data-tab="skins">
+          <svg viewBox="0 0 24 24"><path d="M12 2a4 4 0 1 1 0 8 4 4 0 0 1 0-8zm-7 18c0-4 3-7 7-7s7 3 7 7v2H5z" /></svg>Skins
+        </button>
+        <button class="nav-item" data-tab="mods">
+          <svg viewBox="0 0 24 24"><path d="M12 2 3 7v10l9 5 9-5V7zm0 2.3L18.6 8 12 11.7 5.4 8zM5 9.7l6 3.4v6.6l-6-3.3zm8 10V13l6-3.3v6.7z" /></svg>Mods / Loaders
+        </button>
+        <button class="nav-item" data-tab="settings">
+          <svg viewBox="0 0 24 24"><path d="M19.4 13a7.5 7.5 0 0 0 0-2l2.1-1.6-2-3.5-2.5 1a7.6 7.6 0 0 0-1.7-1L15 3h-4l-.4 2.9a7.6 7.6 0 0 0-1.7 1l-2.5-1-2 3.5L6.6 11a7.5 7.5 0 0 0 0 2l-2.1 1.6 2 3.5 2.5-1a7.6 7.6 0 0 0 1.7 1L11 21h4l.4-2.9a7.6 7.6 0 0 0 1.7-1l2.5 1 2-3.5zM13 15.5a3.5 3.5 0 1 1 0-7 3.5 3.5 0 0 1 0 7z" transform="translate(-1 0)" /></svg>Settings
+        </button>
+      </nav>
+
+      <button id="account-status" class="account-status" title="Manage account">
+        <span id="account-dot" class="dot"></span>
+        <span id="account-label">Offline mode</span>
+      </button>
+    </aside>
+
+    <main class="main">
+      <div class="views">
+        <!-- PLAY -->
+        <section class="view active" id="view-play">
+          <div class="hero">
+            <div class="hero-content">
+              <span class="eyebrow">Java Edition</span>
+              <h1>Minecraft</h1>
+              <p id="hero-sub" class="hero-sub">Ready to play</p>
+              <div class="chips">
+                <span class="chip" id="chip-version">1.20.1</span>
+                <span class="chip" id="chip-loader">Vanilla</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="progress-block">
+            <div class="progress-head">
+              <span id="status-text">Idle</span>
+              <span id="progress-meta" class="muted"></span>
+            </div>
+            <div class="progress"><div id="progress-bar" class="progress-bar"></div></div>
+            <div class="progress-foot muted">
+              <span id="download-file"></span>
+              <span id="download-speed"></span>
+            </div>
+          </div>
+
+          <div class="action-bar">
+            <div class="field">
+              <label for="version">Version</label>
+              <select id="version"><option value="1.20.1">1.20.1</option></select>
+            </div>
+            <div class="field">
+              <label for="loader">Mod loader</label>
+              <select id="loader">
+                <option value="vanilla">Vanilla</option>
+                <option value="fabric">Fabric</option>
+                <option value="forge">Forge</option>
+                <option value="optifine">OptiFine</option>
+              </select>
+            </div>
+            <button id="launch" class="btn btn-primary btn-launch">Launch Game</button>
+          </div>
+        </section>
+
+        <!-- SKINS -->
+        <section class="view" id="view-skins">
+          <header class="view-head">
+            <h2>Skins</h2>
+            <p class="muted">Preview and apply a custom skin.</p>
+          </header>
+          <div class="skins-layout">
+            <div class="card skin-preview">
+              <canvas id="skin-canvas" width="260" height="340"></canvas>
+              <div id="skin-empty" class="skin-empty muted">No skin selected</div>
+              <button id="skin-anim" class="link">Pause animation</button>
+            </div>
+            <div class="card skin-controls">
+              <label>Model</label>
+              <div class="segmented" id="skin-model">
+                <button class="seg active" data-model="classic">Classic (Steve)</button>
+                <button class="seg" data-model="slim">Slim (Alex)</button>
+              </div>
+
+              <label>From file</label>
+              <button id="skin-upload" class="btn btn-secondary full">Upload Skin File (.png)</button>
+
+              <label for="skin-url">From URL</label>
+              <div class="input-row">
+                <input id="skin-url" type="text" placeholder="https://example.com/skin.png" spellcheck="false" />
+                <button id="skin-url-btn" class="btn btn-secondary">Import</button>
+              </div>
+
+              <label for="skin-player">From Mojang player</label>
+              <div class="input-row">
+                <input id="skin-player" type="text" maxlength="16" placeholder="Username" spellcheck="false" />
+                <button id="skin-player-btn" class="btn btn-secondary">Import</button>
+              </div>
+
+              <label class="switch"><input id="skin-offline" type="checkbox" checked /><span></span>Apply to offline profile</label>
+              <small class="hint">Offline skins use a generated resource pack. Only you can see them.</small>
+
+              <div class="btn-row">
+                <button id="skin-ms-upload" class="btn btn-primary" disabled>Upload to Microsoft account</button>
+                <button id="skin-clear" class="btn btn-secondary">Reset</button>
+              </div>
+              <div id="skin-status" class="skin-status muted"></div>
+            </div>
+          </div>
+        </section>
+
+        <!-- MODS / LOADERS -->
+        <section class="view" id="view-mods">
+          <header class="view-head">
+            <h2>Mods / Loaders</h2>
+            <p class="muted">Pick a loader for <span id="mods-version">1.20.1</span>. Modded profiles get their own instance folder.</p>
+          </header>
+          <div class="loader-grid">
+            <button class="card loader-card" data-loader="vanilla"><strong>Vanilla</strong><span class="muted">The unmodified game.</span></button>
+            <button class="card loader-card" data-loader="fabric"><strong>Fabric</strong><span class="muted">Lightweight, fast-updating mod loader.</span></button>
+            <button class="card loader-card" data-loader="forge"><strong>Forge</strong><span class="muted">The classic loader for large mod packs.</span></button>
+            <button class="card loader-card" data-loader="optifine"><strong>OptiFine</strong><span class="muted">Performance tweaks and shader support.</span></button>
+          </div>
+          <div class="card form-card">
+            <div class="field">
+              <label for="loader-version">Loader version</label>
+              <select id="loader-version" disabled><option value="">-</option></select>
+            </div>
+            <div class="btn-row">
+              <button id="open-mods" class="btn btn-secondary" disabled>Open mods folder</button>
+            </div>
+          </div>
+        </section>
+
+        <!-- SETTINGS -->
+        <section class="view" id="view-settings">
+          <header class="view-head">
+            <h2>Settings</h2>
+            <p class="muted">Account, memory and Java runtime.</p>
+          </header>
+
+          <div class="card form-card">
+            <h3>Account</h3>
+            <div class="segmented" id="account-type">
+              <button class="seg active" data-account="offline">Offline</button>
+              <button class="seg" data-account="microsoft">Microsoft</button>
+            </div>
+            <div id="offline-panel">
+              <label for="username">Username</label>
+              <input id="username" type="text" maxlength="16" placeholder="Steve" autocomplete="off" spellcheck="false" />
+              <small class="hint" id="username-hint">3-16 characters: letters, numbers, _</small>
+            </div>
+            <div id="microsoft-panel" class="hidden">
+              <div id="ms-signed-out">
+                <button id="ms-login" class="btn btn-primary">Sign in with Microsoft</button>
+              </div>
+              <div id="ms-signed-in" class="hidden ms-profile">
+                <img id="ms-avatar" alt="" />
+                <div>
+                  <div id="ms-name" class="profile-name"></div>
+                  <button id="ms-logout" class="link">Sign out</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card form-card">
+            <h3>Game</h3>
+            <label for="memory">Max memory <span class="value"><span id="memory-value">4</span> GB</span></label>
+            <input id="memory" type="range" min="1" max="16" step="1" value="4" />
+            <label class="switch"><input id="show-snapshots" type="checkbox" /><span></span>Show snapshots</label>
+            <div class="btn-row">
+              <button id="open-dir" class="btn btn-secondary">Open game folder</button>
+            </div>
+          </div>
+
+          <div class="card form-card">
+            <h3>Java runtime</h3>
+            <label for="java-path">Java path <small class="muted">(leave empty for automatic)</small></label>
+            <div class="input-row">
+              <input id="java-path" type="text" placeholder="Automatic - picks Java 17/21 or downloads it" spellcheck="false" />
+              <button id="java-detect" class="btn btn-secondary">Detect</button>
+            </div>
+            <div id="java-list" class="java-list"></div>
+          </div>
+        </section>
+      </div>
+
+      <div class="log-drawer collapsed" id="log-card">
+        <div class="log-head">
+          <button id="log-toggle" class="log-toggle" aria-expanded="false">
+            <span class="chevron">&#9656;</span> Launch log <span id="log-last" class="log-last"></span>
+          </button>
+          <div class="log-actions">
+            <label class="check"><input id="log-debug" type="checkbox" /> Debug</label>
+            <button id="log-clear" class="link">Clear</button>
+          </div>
+        </div>
+        <pre id="log" class="log hide-debug"></pre>
+      </div>
+    </main>
+  </div>
+
+  <script src="../../node_modules/skinview3d/bundles/skinview3d.bundle.js"></script>
+  <script src="renderer.js"></script>
+</body>
+</html>

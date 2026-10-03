@@ -1,0 +1,24 @@
+{
+  "name": "minecraft-launcher",
+  "version": "1.0.0",
+  "description": "A modern Electron Minecraft launcher powered by minecraft-launcher-core and msmc",
+  "main": "src/main.js",
+  "scripts": {
+    "start": "electron .",
+    "dev": "electron . --enable-logging"
+  },
+  "keywords": [
+    "minecraft",
+    "launcher",
+    "electron"
+  ],
+  "license": "MIT",
+  "dependencies": {
+    "minecraft-launcher-core": "^3.18.2",
+    "msmc": "^5.0.5",
+    "skinview3d": "^3.4.2"
+  },
+  "devDependencies": {
+    "electron": "^44.5.1"
+  }
+}
